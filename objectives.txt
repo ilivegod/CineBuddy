@@ -1,16 +1,16 @@
 -------HomePage------
-[ ] Trending movies
-[ ] Upcoming movies (with see all)
-[ ] Top rated movies (with see all)
+[x] Trending movies
+[x] Top rated movies (with see all)
+[x] Upcoming movies (with see all)
 
 -------moviePage------
 when we click on a movie it leads us to a movie details page
-[ ] movie photo 
-[ ] movie title
-[ ] released and duration
-[ ] genre
-[ ] synopsis
-[ ] top cast
+[x] movie photo 
+[x] movie title
+[x] released and duration
+[x] genre
+[x] synopsis
+[x] top cast
 [ ] similar movies
 
 --------castPage--------
@@ -24,9 +24,9 @@ clicking on a cast leads to a page with cast info
 
 
 ------Search page-------
-[ ] search input
-[ ] results (with number)
-[ ] all movies from the search
+[x] search input
+[x] results (with number)
+[x] all movies from the search
 
 
 
