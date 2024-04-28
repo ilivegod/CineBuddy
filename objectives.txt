@@ -2,6 +2,7 @@
 [x] Trending movies
 [x] Top rated movies (with see all)
 [x] Upcoming movies (with see all)
+[] show titles of movies
 
 -------moviePage------
 when we click on a movie it leads us to a movie details page
@@ -11,13 +12,12 @@ when we click on a movie it leads us to a movie details page
 [x] genre
 [x] synopsis
 [x] top cast
-[ ] similar movies
+[x] similar movies
 
 --------castPage--------
 clicking on a cast leads to a page with cast info
 [ ] cast photo
 [ ] name
-[ ] similar movies
 [ ] gender, birhday, popularity
 [ ] biography
 [ ]  movies

@@ -43,7 +43,7 @@ const SearchPage = () => {
         >
           {result?.map((item, index) => {
             return (
-              <View>
+              <View key={index}>
                 <ResultsCard />
               </View>
             );

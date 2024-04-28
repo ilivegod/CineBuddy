@@ -3,14 +3,41 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Feather } from "@expo/vector-icons";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MovieCard from "../components/MovieCard";
 import MovieDetail from "./MovieDetail";
+import {
+  fetchTopRatedMovies,
+  fetchTrendingMovies,
+  fetchUpcomingMovies,
+} from "../hook/UseFetch";
 
 const Home = ({ navigation }) => {
   const [trending, setTrending] = useState([1, 2, 3, 4]);
   const [topRated, setTopRated] = useState([1, 2, 3, 4]);
   const [upcoming, setUpcoming] = useState([1, 2, 3, 4]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getTrendingMovies();
+    getTopRatedMoves();
+    getUpcomingMoves();
+  }, []);
+
+  const getTrendingMovies = async () => {
+    const data = await fetchTrendingMovies();
+    if (data && data?.results) setTrending(data.results);
+  };
+
+  const getTopRatedMoves = async () => {
+    const data = await fetchTopRatedMovies();
+    if (data && data?.results) setTopRated(data.results);
+  };
+
+  const getUpcomingMoves = async () => {
+    const data = await fetchUpcomingMovies();
+    if (data && data?.results) setUpcoming(data.results);
+  };
 
   return (
     // backgroundColor: "#111010"
@@ -67,15 +94,17 @@ const Home = ({ navigation }) => {
               <Text style={{ color: "gray" }}>See all</Text>
             </TouchableOpacity>
           </View>
+
           <ScrollView
             horizontal
             style={{ marginTop: 20, flexDirection: "row" }}
             showsHorizontalScrollIndicator={false}
           >
             {trending.map((item, index) => {
+              //console.log(item);
               return (
-                <View key={index} style={{ color: "white", paddingRight: 15 }}>
-                  <MovieCard />
+                <View key={index} style={{ color: "white", paddingRight: 20 }}>
+                  {trending.length > 0 && <MovieCard data={item} />}
                 </View>
               );
             })}
@@ -106,7 +135,7 @@ const Home = ({ navigation }) => {
             {topRated.map((item, index) => {
               return (
                 <View key={index} style={{ color: "white", paddingRight: 15 }}>
-                  <MovieCard />
+                  {topRated.length > 0 && <MovieCard data={item} />}
                 </View>
               );
             })}
@@ -134,10 +163,10 @@ const Home = ({ navigation }) => {
             style={{ marginTop: 20, flexDirection: "row" }}
             showsHorizontalScrollIndicator={false}
           >
-            {topRated.map((item, index) => {
+            {upcoming.map((item, index) => {
               return (
                 <View key={index} style={{ color: "white", paddingRight: 15 }}>
-                  <MovieCard />
+                  {upcoming.length > 0 && <MovieCard data={item} />}
                 </View>
               );
             })}
