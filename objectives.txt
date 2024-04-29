@@ -18,11 +18,11 @@ when we click on a movie it leads us to a movie details page
 
 --------castPage--------
 clicking on a cast leads to a page with cast info
-[ ] cast photo
-[ ] name
-[ ] gender, birhday, popularity
-[ ] biography
-[ ]  movies
+[x] cast photo
+[x] name
+[x] gender, birhday
+[x] biography
+[x]  movies
 
 
 ------Search page-------

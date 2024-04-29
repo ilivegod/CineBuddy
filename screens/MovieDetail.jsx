@@ -72,6 +72,7 @@ const MovieDetail = ({ route, navigation }) => {
           </TouchableOpacity>
 
           <TouchableOpacity
+            onPress={() => navigation.navigate("CastDetail")}
             style={{
               width: 40,
               height: 40,

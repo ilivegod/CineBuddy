@@ -7,9 +7,9 @@ const CastCard = ({ navigation }) => {
         <TouchableOpacity onPress={() => navigation.navigate("MovieDetail")}>
           <Image
             style={{
-              width: 60,
-              height: 60,
-              borderRadius: 30,
+              width: 90,
+              height: 90,
+              borderRadius: 15,
             }}
             source={require("../assets/profile.jpg")}
           />
