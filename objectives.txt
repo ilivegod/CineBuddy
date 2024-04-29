@@ -2,7 +2,9 @@
 [x] Trending movies
 [x] Top rated movies (with see all)
 [x] Upcoming movies (with see all)
-[] show titles of movies
+[x] show titles of movies
+[x] provide fallback movie poster
+[] provide fallback person image
 
 -------moviePage------
 when we click on a movie it leads us to a movie details page

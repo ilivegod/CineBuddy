@@ -4,18 +4,43 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer, useRoute } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import CastCard from "../components/CastCard";
 import MovieCard from "../components/MovieCard";
+import { fetchCredits, fetchMovieDetails } from "../hook/UseFetch";
 
-const MovieDetail = ({ navigation }) => {
-  const [cast, setCast] = useState([1, 2, 3, 4]);
+const MovieDetail = ({ route, navigation }) => {
+  const [cast, setCast] = useState([]);
   const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4]);
+  const [loading, setLoading] = useState(false);
+  //const { params: item } = useRoute;
+  const { item } = route.params;
+  const [movie, setMovie] = useState({});
+
+  useEffect(() => {
+    setLoading(true);
+    getMovieDetails(item);
+    getCredit(item);
+  }, [item]);
+
+  const getMovieDetails = async (movieId) => {
+    const data = await fetchMovieDetails(movieId);
+    if (data) setMovie(data);
+  };
+
+  const getCredit = async (movieId) => {
+    const data = await fetchCredits(movieId);
+    //console.log(data);
+    if (data && data.cast) setCast(data.cast);
+  };
+
+  let backdropPath = movie?.backdrop_path;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#111010" }}>
@@ -62,14 +87,15 @@ const MovieDetail = ({ navigation }) => {
             <Ionicons name="menu-outline" size={24} color="white" />
           </TouchableOpacity>
         </View>
-        <View
-          style={{
-            height: 240,
-            width: "100%",
-            borderWidth: 1,
-            borderColor: "gray",
-          }}
-        ></View>
+        <View>
+          <Image
+            source={{ uri: `https://image.tmdb.org/t/p/w500${backdropPath}` }}
+            style={{
+              height: 250,
+              width: "100%",
+            }}
+          />
+        </View>
         {/* ---------------title info----------------- */}
         <View
           style={{
@@ -80,9 +106,14 @@ const MovieDetail = ({ navigation }) => {
           }}
         >
           <Text style={{ color: "white", fontWeight: "700", fontSize: 20 }}>
-            Title
+            {movie?.title}
           </Text>
-          <Text style={{ color: "gray" }}>2023 2h 43m Action-thriller</Text>
+          <Text style={{ color: "gray" }}>
+            {movie?.release_date?.split("-")[0]} {movie?.runtime} min{"  "}
+            {movie?.genres?.map((item, index) => {
+              return <Text key={index}>{item.name} </Text>;
+            })}
+          </Text>
         </View>
         {/* ---------------sypnosis area----------------- */}
         <View
@@ -94,15 +125,9 @@ const MovieDetail = ({ navigation }) => {
           }}
         >
           <Text style={{ color: "white", fontWeight: "700", fontSize: 20 }}>
-            Sypnosis
+            Synopsis
           </Text>
-          <Text style={{ color: "gray" }}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-            tenetur quasi iste necessitatibus sit asperiores quos, ratione
-            dignissimos ex mollitia consectetur ducimus harum omnis optio
-            laborum. Debitis nostrum, voluptate quo at accusantium ex
-            voluptatibus vel reprehenderit? Quaerat eaque ut ipsa molestias et
-          </Text>
+          <Text style={{ color: "gray" }}>{movie?.overview}</Text>
         </View>
         {/* ---------------top cast area----------------- */}
         <View
@@ -124,7 +149,8 @@ const MovieDetail = ({ navigation }) => {
             {cast?.map((item, index) => {
               return (
                 <View key={index} style={{ paddingRight: 13 }}>
-                  <CastCard />
+                  <CastCard data={item} />
+                  {/* <Text style={{ color: "white" }}>{item?.character}</Text> */}
                 </View>
               );
             })}

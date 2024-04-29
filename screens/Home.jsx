@@ -1,4 +1,11 @@
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  ScrollView,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -13,9 +20,9 @@ import {
 } from "../hook/UseFetch";
 
 const Home = ({ navigation }) => {
-  const [trending, setTrending] = useState([1, 2, 3, 4]);
-  const [topRated, setTopRated] = useState([1, 2, 3, 4]);
-  const [upcoming, setUpcoming] = useState([1, 2, 3, 4]);
+  const [trending, setTrending] = useState([]);
+  const [topRated, setTopRated] = useState([]);
+  const [upcoming, setUpcoming] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -103,15 +110,21 @@ const Home = ({ navigation }) => {
             {trending.map((item, index) => {
               //console.log(item);
               return (
-                <View key={index} style={{ color: "white", paddingRight: 20 }}>
+                <TouchableOpacity
+                  key={index}
+                  style={{ color: "white", paddingRight: 20 }}
+                  onPress={() =>
+                    navigation.navigate("MovieDetail", { item: item.id })
+                  }
+                >
                   {trending.length > 0 && <MovieCard data={item} />}
-                </View>
+                </TouchableOpacity>
               );
             })}
           </ScrollView>
         </View>
         {/* --------------Top Rated---------------- */}
-        <View style={{ marginTop: 40 }}>
+        <View style={{ marginTop: 0 }}>
           <View
             style={{
               flexDirection: "row",
@@ -134,15 +147,21 @@ const Home = ({ navigation }) => {
           >
             {topRated.map((item, index) => {
               return (
-                <View key={index} style={{ color: "white", paddingRight: 15 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("MovieDetail", { item: item.id })
+                  }
+                  key={index}
+                  style={{ color: "white", paddingRight: 15 }}
+                >
                   {topRated.length > 0 && <MovieCard data={item} />}
-                </View>
+                </TouchableOpacity>
               );
             })}
           </ScrollView>
         </View>
         {/* --------------Upcoming---------------- */}
-        <View style={{ marginTop: 40 }}>
+        <View style={{ marginTop: 20 }}>
           <View
             style={{
               flexDirection: "row",
@@ -165,9 +184,15 @@ const Home = ({ navigation }) => {
           >
             {upcoming.map((item, index) => {
               return (
-                <View key={index} style={{ color: "white", paddingRight: 15 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate("MovieDetail", { item: item.id })
+                  }
+                  key={index}
+                  style={{ color: "white", paddingRight: 15 }}
+                >
                   {upcoming.length > 0 && <MovieCard data={item} />}
-                </View>
+                </TouchableOpacity>
               );
             })}
           </ScrollView>
