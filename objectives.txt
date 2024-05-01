@@ -1,7 +1,10 @@
 -------HomePage------
-[x] Trending movies
+[x] Trending movies (with see all)
+[] see all leads to all trending movies
 [x] Top rated movies (with see all)
+[] see all leads to all top rated movies
 [x] Upcoming movies (with see all)
+[] see all leads to all top upcoming movies
 [x] show titles of movies
 [x] provide fallback movie poster
 [] provide fallback person image

@@ -10,18 +10,30 @@ const Upcomingendpoint = `https://api.themoviedb.org/3/movie/upcoming?api_key=${
 // ----------dynamic endpoints---------------
 const movieDetailsEndpoint = (movieId) =>
   `https://api.themoviedb.org/3/movie/${movieId}?language=en-US}&api_key=${APIkey}`;
+
 const movieCreditsEndpoint = (movieId) =>
   `https://api.themoviedb.org/3/movie/${movieId}/credits?language=en-US}&api_key=${APIkey}`;
+
 const movieSimilarEndpoint = (movieId) =>
   `https://api.themoviedb.org/3/movie/${movieId}/similar?language=en-US}&api_key=${APIkey}`;
+
+const castDetailsEndpoint = (personId) =>
+  `https://api.themoviedb.org/3/person/${personId}?language=en-US}&api_key=${APIkey}`;
+
+const castMoviesEndpoint = (personId) =>
+  `https://api.themoviedb.org/3/person/${personId}/movie_credits?language=en-US}&api_key=${APIkey}`;
+
+const searchMoviesEndpoint = (query) =>
+  `https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1}&api_key=${APIkey}`;
 
 export const Image500 = (path) =>
   path ? `https://image.tmdb.org/t/p/w500${path}` : null;
 
-const ApiCall = async (endpoint) => {
+const ApiCall = async (endpoint, params) => {
   const options = {
     method: "GET",
     url: endpoint,
+    params: params ? params : {},
   };
   try {
     const response = await axios.request(options);
@@ -54,4 +66,16 @@ export const fetchCredits = (movieId) => {
 
 export const fetchSimilar = (movieId) => {
   return ApiCall(movieSimilarEndpoint(movieId));
+};
+
+export const fetchPersonDetails = (personId) => {
+  return ApiCall(castDetailsEndpoint(personId));
+};
+
+export const fetchCastMovies = (personId) => {
+  return ApiCall(castMoviesEndpoint(personId));
+};
+
+export const fetchSearchMovies = (query) => {
+  return ApiCall(searchMoviesEndpoint(query));
 };

@@ -13,20 +13,28 @@ import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import CastCard from "../components/CastCard";
 import MovieCard from "../components/MovieCard";
-import { fetchCredits, fetchMovieDetails } from "../hook/UseFetch";
+import {
+  fetchCredits,
+  fetchMovieDetails,
+  fetchSimilar,
+} from "../hook/UseFetch";
 
 const MovieDetail = ({ route, navigation }) => {
   const [cast, setCast] = useState([]);
-  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4]);
-  const [loading, setLoading] = useState(false);
+  const [similarMovies, setSimilarMovies] = useState([1, 2]);
+  const [loading, setLoading] = useState(true);
   //const { params: item } = useRoute;
   const { item } = route.params;
   const [movie, setMovie] = useState({});
 
   useEffect(() => {
-    setLoading(true);
     getMovieDetails(item);
     getCredit(item);
+    getSimilarMovies(item);
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+    return () => clearTimeout(timeout);
   }, [item]);
 
   const getMovieDetails = async (movieId) => {
@@ -36,8 +44,13 @@ const MovieDetail = ({ route, navigation }) => {
 
   const getCredit = async (movieId) => {
     const data = await fetchCredits(movieId);
-    //console.log(data);
     if (data && data.cast) setCast(data.cast);
+  };
+
+  const getSimilarMovies = async (movieId) => {
+    const data = await fetchSimilar(movieId);
+
+    if (data && data.results) setSimilarMovies(data.results);
   };
 
   let backdropPath = movie?.backdrop_path;
@@ -60,7 +73,7 @@ const MovieDetail = ({ route, navigation }) => {
               width: 40,
               height: 40,
               borderRadius: 20,
-              backgroundColor: "gray",
+              backgroundColor: "#80808080",
               alignItems: "center",
               justifyContent: "center",
               position: "absolute",
@@ -77,7 +90,7 @@ const MovieDetail = ({ route, navigation }) => {
               width: 40,
               height: 40,
               borderRadius: 20,
-              backgroundColor: "gray",
+              backgroundColor: "#80808080",
               alignItems: "center",
               justifyContent: "center",
               position: "absolute",
@@ -128,7 +141,9 @@ const MovieDetail = ({ route, navigation }) => {
           <Text style={{ color: "white", fontWeight: "700", fontSize: 20 }}>
             Synopsis
           </Text>
-          <Text style={{ color: "gray" }}>{movie?.overview}</Text>
+          <Text style={{ color: "gray", lineHeight: 20 }}>
+            {movie?.overview}
+          </Text>
         </View>
         {/* ---------------top cast area----------------- */}
         <View
@@ -139,20 +154,40 @@ const MovieDetail = ({ route, navigation }) => {
             paddingHorizontal: 20,
           }}
         >
-          <Text style={{ color: "white", fontWeight: "700", fontSize: 20 }}>
-            Top Cast
-          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
+          >
+            <Text style={{ color: "white", fontWeight: "600", fontSize: 20 }}>
+              Top Cast
+            </Text>
+
+            <TouchableOpacity>
+              <Text style={{ color: "gray" }}>See all</Text>
+            </TouchableOpacity>
+          </View>
           <ScrollView
             horizontal
             style={{ marginTop: 10, flexDirection: "row" }}
             showsHorizontalScrollIndicator={false}
           >
-            {cast?.map((item, index) => {
+            {cast?.slice(0, 8).map((item, index) => {
+              let idd = item.id;
+
               return (
-                <View key={index} style={{ paddingRight: 13 }}>
+                <TouchableOpacity
+                  key={index}
+                  style={{ paddingRight: 14 }}
+                  onPress={() =>
+                    navigation.navigate("CastDetail", { item: idd })
+                  }
+                >
                   <CastCard data={item} />
                   {/* <Text style={{ color: "white" }}>{item?.character}</Text> */}
-                </View>
+                </TouchableOpacity>
               );
             })}
           </ScrollView>
@@ -176,9 +211,9 @@ const MovieDetail = ({ route, navigation }) => {
           >
             {similarMovies?.map((item, index) => {
               return (
-                <View key={index} style={{ paddingRight: 13 }}>
-                  <MovieCard />
-                </View>
+                <TouchableOpacity key={index} style={{ paddingRight: 13 }}>
+                  <MovieCard data={item} />
+                </TouchableOpacity>
               );
             })}
           </ScrollView>

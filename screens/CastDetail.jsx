@@ -8,23 +8,56 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MovieCard from "../components/MovieCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { fetchCastMovies, fetchPersonDetails } from "../hook/UseFetch";
+import { LinearGradient } from "expo-linear-gradient";
 
-const CastDetail = ({ navigation }) => {
-  const [similarMovies, setSimilarMovies] = useState([1, 2, 3, 4, 5]);
+const CastDetail = ({ route, navigation }) => {
+  const { item } = route.params;
+
+  const [person, setPerson] = useState({});
+  const [otherMovies, setOtherMovies] = useState([]);
+
+  useEffect(() => {
+    getPersonDetails(item);
+    getPersonMovies(item);
+  }, [item]);
+
+  const getPersonDetails = async (item) => {
+    const data = await fetchPersonDetails(item);
+    setPerson(data);
+  };
+
+  const getPersonMovies = async (item) => {
+    const data = await fetchCastMovies(item);
+
+    if (data && data.cast) setOtherMovies(data.cast);
+  };
+
+  const personPicture = person?.profile_path;
   return (
     <ScrollView
       style={{ flex: 1, backgroundColor: "#111010", paddingBottom: 20 }}
     >
-      <View
-        style={{
-          height: 350,
-          width: "100%",
-          borderWidth: 1,
-          borderColor: "red",
-        }}
-      >
-        <Text style>hi</Text>
+      <View>
+        <Image
+          source={{ uri: `https://image.tmdb.org/t/p/w500${personPicture}` }}
+          style={{
+            height: 450,
+            width: "100%",
+          }}
+        />
+        <LinearGradient
+          colors={["#111010", "transparent"]}
+          start={{ x: 0.5, y: 1 }}
+          end={{ x: 0.5, y: 0 }}
+          style={{
+            position: "absolute",
+            bottom: 0,
+            height: 50,
+            width: "100%",
+          }}
+        />
       </View>
       <View style={{ paddingHorizontal: 20 }}>
         <Text
@@ -36,14 +69,18 @@ const CastDetail = ({ navigation }) => {
             marginTop: 10,
           }}
         >
-          Name
+          {person?.name}
         </Text>
         <View style={{ flexDirection: "row", gap: 10 }}>
           <Text style={{ color: "gray", fontSize: 20, marginTop: 10 }}>
-            Male
+            {person?.gender === 1
+              ? "Female"
+              : person?.gender === 2
+              ? "Male"
+              : ""}
           </Text>
           <Text style={{ color: "gray", fontSize: 20, marginTop: 10 }}>
-            Birthday
+            {person?.birthday}
           </Text>
         </View>
         <View>
@@ -57,12 +94,8 @@ const CastDetail = ({ navigation }) => {
           >
             Biography
           </Text>
-          <Text style={{ color: "gray", marginTop: 10 }}>
-            dsdasadnjaksbdjsa bdjkasb djasb djhs bdsan bdhjsaskbj ddsihd sdhis
-            dhisd his bdbvshadghsjhg dsdasadnjaksbdjsa bdjkasb djasb djhs bdsan
-            bdhjsaskbj ddsihd sdhis dhisd his bdbvshadghsjhg dsdasadnjaksbdjsa
-            bdjkasb djasb djhs bdsan bdhjsaskbj ddsihd sdhis dhisd his
-            bdbvshadghsjhg
+          <Text style={{ color: "gray", marginTop: 10, lineHeight: 21 }}>
+            {person?.biography}
           </Text>
         </View>
         <Text
@@ -73,14 +106,14 @@ const CastDetail = ({ navigation }) => {
             marginTop: 30,
           }}
         >
-          Similar Movies
+          Movies
         </Text>
         <ScrollView horizontal style={{ marginTop: 20 }}>
-          {similarMovies.map((item, index) => {
+          {otherMovies?.map((item, index) => {
             return (
-              <View key={index} style={{ paddingRight: 15 }}>
-                <MovieCard />
-              </View>
+              <TouchableOpacity key={index} style={{ paddingRight: 15 }}>
+                <MovieCard data={item} />
+              </TouchableOpacity>
             );
           })}
         </ScrollView>
