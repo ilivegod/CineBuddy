@@ -6,17 +6,20 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import React, { useCallback } from "react";
+import React, { useCallback, useRef } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MovieCard from "../components/MovieCard";
 import { useState } from "react";
 import { debounce } from "lodash";
+import { Fontisto } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { fetchSearchMovies } from "../hook/UseFetch";
 
-const SearchPage = () => {
-  const [result, setResult] = useState([1, 2, 3, 4, 5, 6]);
+const SearchPage = ({ navigation }) => {
+  const [result, setResult] = useState([]);
   const [loading, setLoading] = useState(false);
+  const textInputRef = useRef(null);
 
   const handleMovieSearch = (value) => {
     if (value && value.length > 2) {
@@ -31,56 +34,81 @@ const SearchPage = () => {
     }
   };
 
+  const clearTextInput = () => {
+    if (textInputRef.current) {
+      textInputRef.current.clear(); // Try to clear first
+      textInputRef.current.value = ""; // Fallback if clear() is not available
+    }
+  };
   const handleTextBounce = useCallback(debounce(handleMovieSearch, 550), []);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#111010" }}>
-      <View>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          justifyContent: "space-between",
+          height: 55,
+          margin: 12,
+          borderWidth: 1,
+          padding: 10,
+          borderColor: "white",
+          borderRadius: 20,
+        }}
+      >
         <TextInput
+          style={{ color: "white" }}
           placeholderTextColor="gray"
           onChangeText={handleTextBounce}
-          style={{
-            height: 55,
-            margin: 12,
-            borderWidth: 1,
-            padding: 10,
-            borderColor: "white",
-            borderRadius: 20,
-            color: "white",
-          }}
           placeholder="search Movie"
-          //onChangeText={onChangeText}
-          //value={text}
+          ref={textInputRef}
         />
-        <Text style={{ color: "white", paddingHorizontal: 15 }}>
-          Search Results({result.length})
-        </Text>
+        <TouchableOpacity onPress={clearTextInput}>
+          <Fontisto name="close-a" size={20} color="white" />
+        </TouchableOpacity>
       </View>
 
-      <ScrollView style={{ marginTop: 20 }}>
-        <View showsVerticalScrollIndicator={false}>
-          <View
-            style={{
-              flexWrap: "wrap",
-              flexDirection: "row",
-
-              justifyContent: "center",
-            }}
-          >
-            {/* Enable wrapping for multiple rows */}
-            {result?.map((item, index) => {
-              return (
-                <TouchableOpacity
-                  key={index}
-                  style={{ paddingHorizontal: 10, paddingVertical: 15 }}
-                >
-                  <MovieCard data={item} />
-                </TouchableOpacity>
-              );
-            })}
+      {result.length > 0 ? (
+        <ScrollView style={{ marginTop: 20 }}>
+          <View>
+            <Text style={{ color: "white", paddingHorizontal: 15 }}>
+              Search Results({result.length})
+            </Text>
           </View>
+          <View showsVerticalScrollIndicator={false}>
+            <View
+              style={{
+                flexWrap: "wrap",
+                flexDirection: "row",
+
+                justifyContent: "center",
+              }}
+            >
+              {/* Enable wrapping for multiple rows */}
+              {result?.map((item, index) => {
+                return (
+                  <TouchableOpacity
+                    key={index}
+                    style={{ paddingHorizontal: 10, paddingVertical: 15 }}
+                    onPress={() =>
+                      navigation.navigate("MovieDetail", { item: item.id })
+                    }
+                  >
+                    <MovieCard data={item} />
+                  </TouchableOpacity>
+                );
+              })}
+            </View>
+          </View>
+        </ScrollView>
+      ) : (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+          <MaterialCommunityIcons name="filmstrip" size={80} color="white" />
         </View>
-      </ScrollView>
+      )}
     </SafeAreaView>
   );
 };

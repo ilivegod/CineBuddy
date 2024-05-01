@@ -28,7 +28,7 @@ clicking on a cast leads to a page with cast info
 [x]  movies
 
 
-------Search page-------
+------Search page------- DONE
 [x] search input
 [x] results (with number)
 [x] all movies from the search
