@@ -98,6 +98,7 @@ const CastDetail = ({ route, navigation }) => {
             {person?.biography}
           </Text>
         </View>
+        {/* -------Movies Area---------- */}
         <Text
           style={{
             color: "white",
@@ -111,7 +112,13 @@ const CastDetail = ({ route, navigation }) => {
         <ScrollView horizontal style={{ marginTop: 20 }}>
           {otherMovies?.map((item, index) => {
             return (
-              <TouchableOpacity key={index} style={{ paddingRight: 15 }}>
+              <TouchableOpacity
+                key={index}
+                style={{ paddingRight: 15 }}
+                onPress={() =>
+                  navigation.navigate("MovieDetail", { item: item.id })
+                }
+              >
                 <MovieCard data={item} />
               </TouchableOpacity>
             );

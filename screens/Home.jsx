@@ -41,6 +41,7 @@ const Home = ({ navigation }) => {
     setLoading(true);
     const data = await fetchTrendingMovies();
     if (data && data?.results) setTrending(data.results);
+
     //setLoading(false);
   };
 
@@ -116,7 +117,11 @@ const Home = ({ navigation }) => {
                 Trending Now
               </Text>
 
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("SeeAllPage", { item: "trending" })
+                }
+              >
                 <Text style={{ color: "gray" }}>See all</Text>
               </TouchableOpacity>
             </View>
@@ -154,7 +159,11 @@ const Home = ({ navigation }) => {
                 Top Rated Movies
               </Text>
 
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("SeeAllPage", { item: "topRated" })
+                }
+              >
                 <Text style={{ color: "gray" }}>See all</Text>
               </TouchableOpacity>
             </View>
@@ -191,7 +200,11 @@ const Home = ({ navigation }) => {
                 Upcoming movies
               </Text>
 
-              <TouchableOpacity>
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("SeeAllPage", { item: "upcoming" })
+                }
+              >
                 <Text style={{ color: "gray" }}>See all</Text>
               </TouchableOpacity>
             </View>

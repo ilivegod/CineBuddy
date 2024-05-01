@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import key from "../constants/index";
 
-const APIkey = "45318439812920846421407861ea6250";
+const APIkey = key;
 
 const Trendingendpoint = `https://api.themoviedb.org/3/trending/movie/day?language=en-US}&api_key=${APIkey}`;
 const TopRatedendpoint = `https://api.themoviedb.org/3/movie/top_rated?api_key=${APIkey}`;

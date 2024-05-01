@@ -164,17 +164,13 @@ const MovieDetail = ({ route, navigation }) => {
             <Text style={{ color: "white", fontWeight: "600", fontSize: 20 }}>
               Top Cast
             </Text>
-
-            <TouchableOpacity>
-              <Text style={{ color: "gray" }}>See all</Text>
-            </TouchableOpacity>
           </View>
           <ScrollView
             horizontal
             style={{ marginTop: 10, flexDirection: "row" }}
             showsHorizontalScrollIndicator={false}
           >
-            {cast?.slice(0, 8).map((item, index) => {
+            {cast?.slice(0, 12).map((item, index) => {
               let idd = item.id;
 
               return (

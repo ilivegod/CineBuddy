@@ -3,6 +3,7 @@ import Home from "../screens/Home";
 import MovieDetail from "../screens/MovieDetail";
 import SearchPage from "../screens/SearchPage";
 import CastDetail from "../screens/CastDetail";
+import SeeAllPage from "../screens/SeeAllPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const DefaultStackNavigation = ({ navigation }) => {
       <Stack.Screen name="MovieDetail" component={MovieDetail} />
       <Stack.Screen name="SearchPage" component={SearchPage} />
       <Stack.Screen name="CastDetail" component={CastDetail} />
+      <Stack.Screen name="SeeAllPage" component={SeeAllPage} />
     </Stack.Navigator>
   );
 };
