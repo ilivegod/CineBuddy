@@ -131,7 +131,7 @@ const Home = ({ navigation }) => {
               style={{ marginTop: 20, flexDirection: "row" }}
               showsHorizontalScrollIndicator={false}
             >
-              {trending?.slice(0, 8).map((item, index) => {
+              {trending?.slice(0, 3).map((item, index) => {
                 return (
                   <TouchableOpacity
                     key={index}

@@ -36,8 +36,9 @@ const SearchPage = ({ navigation }) => {
 
   const clearTextInput = () => {
     if (textInputRef.current) {
-      textInputRef.current.clear(); // Try to clear first
-      textInputRef.current.value = ""; // Fallback if clear() is not available
+      textInputRef.current.clear();
+      textInputRef.current.value = "";
+      setResult();
     }
   };
   const handleTextBounce = useCallback(debounce(handleMovieSearch, 550), []);
@@ -69,7 +70,7 @@ const SearchPage = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {result.length > 0 ? (
+      {result?.length > 0 ? (
         <ScrollView style={{ marginTop: 20 }}>
           <View>
             <Text style={{ color: "white", paddingHorizontal: 15 }}>
